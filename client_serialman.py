@@ -34,8 +34,6 @@ MQTT_BROKER ="mqtt.eclipseprojects.io"
 client = mqtt.Client("Serial_Station_01")
 client.connect(MQTT_BROKER) 
 
-# client.loop_start()
-
 client.subscribe("ELEVATOR_CARRIER")
 client.subscribe("INKJET_SERIAL")
 client.on_message=on_message
@@ -49,6 +47,7 @@ client.on_message=on_message
 # client.message_callback_add('INKJET_SERIAL', on_message)
 # client.message_callback_add('ELEVATOR_CARRIER', on_message_carrier)
 
+# client.loop_start()
 # time.sleep(30)
 # client.loop_stop()
 
