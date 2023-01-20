@@ -1,11 +1,17 @@
 import paho.mqtt.client as mqtt
 import time
 
+MQTT_BROKER ="mqtt.eclipseprojects.io"
+
+# -----------------------------------------------------------------------------
+
 carrier_data = []
 carrier_ids = []
 serials = []
 
 last_count = 0
+
+# -----------------------------------------------------------------------------
 
 def on_message(client, userdata, message):
     value = message.payload.decode("utf-8")
@@ -29,7 +35,7 @@ def on_message_carrier(client, userdata, message):
     print(f"Received {message.topic}: ", str(message.payload.decode("utf-8")))
 
 
-MQTT_BROKER ="mqtt.eclipseprojects.io"
+# -----------------------------------------------------------------------------
 
 client = mqtt.Client("Serial_Station_01")
 client.connect(MQTT_BROKER) 
