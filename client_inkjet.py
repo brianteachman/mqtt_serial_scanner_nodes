@@ -12,9 +12,8 @@ SCANNER_PORT = 9004
 client = mqtt.Client("Inkjet_Serial_Scanner")
 client.connect(MQTT_BROKER)
 
-s = SRScanner(SCANNER_IP, SCANNER_PORT)
-
 def read_scanner():
+    s = SRScanner(SCANNER_IP, SCANNER_PORT)
     return s.read_code()
 
 def mock_scanner():
@@ -27,7 +26,7 @@ try:
         serial_number = mock_scanner()
         client.publish("INKJET_SERIAL", serial_number)
         print(f"Just published serial {serial_number} to topic INKJET_SERIAL")
-        time.sleep(1)
+        time.sleep(5)
 
 except KeyboardInterrupt:
     print("Done")

@@ -9,16 +9,17 @@ SCANNER_PORT = 9004
 
 # -----------------------------------------------------------------------------
 
-client = mqtt.Client("Elevator_Scanner")
-client.connect(MQTT_BROKER) 
-
-s = SRScanner(SCANNER_IP, SCANNER_PORT)
-
 def read_scanner():
+    s = SRScanner(SCANNER_IP, SCANNER_PORT)
     return s.read_code()
 
 def mock_scanner():
     return int(uniform(1, 14))
+
+client = mqtt.Client("Elevator_Scanner")
+client.connect(MQTT_BROKER) 
+
+# -----------------------------------------------------------------------------
 
 try:
 
@@ -26,7 +27,7 @@ try:
         carrier_number = mock_scanner()
         client.publish("ELEVATOR_CARRIER", f"{carrier_number}")
         print(f"Just published carrier {carrier_number} to topic ELEVATOR_CARRIER")
-        time.sleep(1)
+        time.sleep(5)
 
 except KeyboardInterrupt:
     print("Done")
