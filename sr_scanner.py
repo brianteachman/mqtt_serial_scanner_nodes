@@ -121,7 +121,7 @@ class SRScanner:
         pass
 
     # Send/Receive a Message
-    def read_serial(self):
+    def read_code(self):
         return str(self.req(TRIGGER_INPUT_ON))
 
     def error_type(self):
@@ -136,7 +136,7 @@ if __name__ == '__main__':
 
         while True:
             # Fetch serial number
-            print(s.read_serial())
+            print(s.read_code())
             sleep(1)
 
     except KeyboardInterrupt:
