@@ -1,7 +1,8 @@
 import paho.mqtt.client as mqtt
 import time
 
-MQTT_BROKER ="mqtt.eclipseprojects.io"
+CLIENT_NAME = "Serial_Station_01"
+MQTT_BROKER = "mqtt.eclipseprojects.io"
 
 # -----------------------------------------------------------------------------
 
@@ -22,22 +23,20 @@ def on_message(client, userdata, message):
         serials.append(value)
 
     global last_count
-    if len(carrier_ids) is len(serials) and len(serials) is not last_count:
-        carrier_data.append((carrier_ids[-1], serials[-1]))
+    if (len(carrier_ids) > last_count) and (len(serials) > last_count):
+        carrier_data.append((carrier_ids[last_count], serials[last_count]))
         last_count = last_count + 1
 
     # print(carrier_ids)
     # print(serials)
     print(carrier_data)
 
-
 def on_message_carrier(client, userdata, message):
     print(f"Received {message.topic}: ", str(message.payload.decode("utf-8")))
 
-
 # -----------------------------------------------------------------------------
 
-client = mqtt.Client("Serial_Station_01")
+client = mqtt.Client(CLIENT_NAME)
 client.connect(MQTT_BROKER) 
 
 client.subscribe("ELEVATOR_CARRIER")

@@ -2,7 +2,6 @@
 import socket
 from time import sleep
 
-
 # Keyence Scanner ASCII Commands ------------------------------------------------------
 
 """
@@ -72,11 +71,10 @@ GET_ERROR_STATUS = b'ERRSTAT\r'
 
 # -----------------------------------------------------------------------------
 
-
 """
 Class for Communication with an SR1000 Keyence Scanner
 """
-class SRScanner:
+class Scanner:
 
     def __init__(self, ip_addr, port, logger=None):
         self.ip = ip_addr
@@ -84,59 +82,59 @@ class SRScanner:
         self.conn = None  # Socket Connection
         self.connected = False
         self.log = logger
-        self.connect()
+        self._connect()
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self):
+        self.conn.close()  # close the connection
+        return True
 
     # Initiate a connection to the SR1000
-    def connect(self):
+    def _connect(self):
         self.conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # Socket Connection
         self.conn.settimeout(10)
         try:
             self.conn.connect((self.ip, self.port))  # connect to the server
             sleep(.1)
-            # print(self.rx())
+            # print(self._rx())
             self.connected = True
             print(f"Connected to {self.ip}:{self.port}")
         except socket.error as er:
             print(f"Connection Failed: {er}")
 
-    def tx(self, message):
+    def _tx(self, message):
         self.conn.sendall(message)  # send message
 
-    def rx(self):
+    def _rx(self):
         data = self.conn.recv(1024).decode()  # receive response
-        # print('Received from scanner: ' + data)
         return data
         
     # Send/Receive a Message
     def req(self, message):
-        self.tx(message)  # send TCP message
+        self._tx(message)  # send TCP message
         sleep(.1)
-        data = self.rx()  # recieve TCP message
+        data = self._rx()  # recieve TCP message
         return data
-        # self.conn.close()  # close the connection
-
-    # Request Status
-    def get_status(self):
-        # return self.req(REQUEST_STATUS)
-        pass
 
     # Send/Receive a Message
     def read_code(self):
         return str(self.req(TRIGGER_INPUT_ON))
 
-    def error_type(self):
+    def has_error_type(self):
         return s.req(GET_ERROR_STATUS).replace('OK,ERRSTAT,', '')
 
+# -----------------------------------------------------------------------------
 
 if __name__ == '__main__':
 
-    s = SRScanner("192.168.1.54", 9004)
+    s = Scanner("192.168.1.54", 9004)
 
     try:
 
         while True:
-            # Fetch serial number
-            print(s.read_code())
+            print(s.read_code())  # Fetch serial number
             sleep(1)
 
     except KeyboardInterrupt:
