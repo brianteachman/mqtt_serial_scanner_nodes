@@ -1,12 +1,15 @@
+# import pymssql
 import sqlalchemy as db
 from sqlalchemy import create_engine
+from sqlalchemy.exc import SQLAlchemyError
+from dotenv import dotenv_values
 
 
-class SQL:
+class Database:
 
     def __init__(self, connection_string):
         self.db_address = connection_string
-        self.serial_number = None
+        self.last_serial_number = 0
         self.error = False
 
     def query(self, statement):
@@ -19,28 +22,36 @@ class SQL:
             cursor.close()
             connection.commit()
             return result_set
-        except:
+        except SQLAlchemyError as er:
+            print(str(er.__dict__['orig']))
             return []
         finally:
             connection.close()
 
-    def update_panel(self, serialno, station):
-        result_set = self.query("EXEC spCheckpoint "+serialno.strip()+", "+station)
+    def update_panel(self, serial_number, station):
+        serial_number = serial_number.strip()
+        # stmt = f"EXEC spCheckpoint @SerialNumber = '{serial_number}', @MachineName = '{station}'"
+        stmt = f"EXEC spCheckpoint '{serial_number}', '{station}'"
+        print(stmt)
+        result_set = self.query(stmt)
+        self.last_serial_number = serial_number
         print(result_set)
 
-    # def get_panel(self, serialno):
-    #     statement = "SELECT [SerialNo],[StartDate],[StartTime],[Engraved],[Rework] FROM [silfaberp].[dbo].serials WHERE [SerialNo] like '%s'" % serialno
+    # def get_panel(self, serial_number):
+    #     statement = "SELECT [SerialNumber],[StartDate],[StartTime],[Engraved],[Rework] FROM [serialtracker].[dbo].serials WHERE [SerialNumber] like '%s'" % serial_number
     #     result_set = self.query(statement)
     #     print(result_set)
 
     # def get_serials(self, start, end):
-    #     statement = "SELECT SerialNo,StartDate,StartTime,Laminator,LamPosition,Trimmer FROM [silfaberp].[dbo].serials WHERE [StartDate] BETWEEN %s AND %s", (start, end)
+    #     statement = "SELECT SerialNumber,StartDate,StartTime,Laminator,LamPosition,Trimmer FROM [serialtracker].[dbo].serials WHERE [StartDate] BETWEEN %s AND %s", (start, end)
     #     result_set = self.query(statement)
     #     print(result_set)
 
 
 if __name__ == '__main__':
-    print("Running SQL test.")
+    print("Running Database test.")
 
-    sql = SQL()
-    sql.update_panel('2302030001W', 'Serial Printer')
+    c = dotenv_values()
+
+    db = Database(c["DB_ADDRESS"])
+    db.update_panel("2302030001W", "Serial Printer")
