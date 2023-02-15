@@ -50,18 +50,17 @@ class Database:
     def add_panel(self, serial_number, carrier_number):
         serial_number = serial_number.strip()
         stmt = f"EXEC spNewSerial '{serial_number}', {carrier_number}"
-        print(stmt)
         result_set = self._execute(stmt)
         self.last_serial_number = serial_number
         print(result_set)
 
     def get_panel(self, serial_number):
-        statement = "SELECT SerialNumber,StartDate,StartTime,Engraved,Rework FROM serialtracker.dbo.serials WHERE SerialNumber LIKE '%s'" % serial_number
+        statement = "SELECT SerialNumber,SerialNumber_tstamp,Engraved,Rework FROM serialtracker.dbo.serials WHERE SerialNumber LIKE '%s'" % serial_number
         result_set = self._query(statement)
         print(result_set)
 
     # def get_serials(self, start, end):
-    #     statement = "SELECT SerialNumber,StartDate,StartTime,Laminator,LamPosition,Trimmer FROM [serialtracker].[dbo].serials WHERE [StartDate] BETWEEN %s AND %s", (start, end)
+    #     statement = "SELECT SerialNumber,SerialNumber_tstamp,Laminator,LamPosition FROM [serialtracker].[dbo].serials WHERE [SerialNumber_tstamp] BETWEEN %s AND %s", (start, end)
     #     result_set = self.query(statement)
     #     print(result_set)
 
@@ -89,8 +88,9 @@ if __name__ == '__main__':
     # cursor.close()
     # conn.close()
 
-    for panel in db._query("select * from serials;"):
-        print(str(panel))
+    # for panel in db._query("select * from serials;"):
+        # print(str(panel))
 
-    db.add_panel("2302135000W", 1)
+    db.add_panel("2302135001W", 1)
+    db.get_panel("2302135001W")
 

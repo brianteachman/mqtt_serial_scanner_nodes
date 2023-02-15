@@ -1,9 +1,8 @@
+from dotenv import dotenv_values
 from generate_serial import new_serial
 from mkg1000 import Printer
-from serial_db import Database
 from read_relay import RelayNode
-from dotenv import dotenv_values
-from serial import Serial
+from serial_db import Database
 from time import time, sleep
 
 MIN_PANEL_FREQUENCY = 5
@@ -46,7 +45,7 @@ if __name__ == '__main__':
 
             # Send serial number that was written to database.
             db.add_panel(serial_number, 0)
-            print(serial_number)
+            # print(serial_number)
             is_triggered = False
             has_serial = False
             last_update = this_time

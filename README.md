@@ -1,6 +1,6 @@
-# Serial Number Scanner MQTT Nodes
+# Serial Number Backsheet Printer Controller
 
-This project associates newly created serial numbers to the carriers the module was transported on
+This project tells a Keyence MK-G1000 Inkjet printer what the next serial number to write next is, then associates the newly created serial numbers to the carriers the module was transported on during production and saves that information to a tracking database.
 
 ## Install
 

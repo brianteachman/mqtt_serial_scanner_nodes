@@ -23,7 +23,7 @@ def _check_last_serial_data():
         daily_count = 0
     elif data["lastid"] > 0 and daily_count == 0:
         daily_count = data["lastid"]
-    print(data)
+    # print(data)
 
 def _fetch_last():
     with open("last_serial_data.json", "r") as read_file:

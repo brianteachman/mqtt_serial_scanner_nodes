@@ -23,6 +23,8 @@ def on_message(client, userdata, message):
 
     global last_count
     if len(carrier_ids) is len(serials) and len(serials) is not last_count:
+        if len(carrier_data) > 0:
+            carrier_data.remove()
         carrier_data.append((carrier_ids[-1], serials[-1]))
         last_count = last_count + 1
 
@@ -38,7 +40,7 @@ def on_message_carrier(client, userdata, message):
 # -----------------------------------------------------------------------------
 
 client = mqtt.Client("Serial_Station_01")
-client.connect(MQTT_BROKER) 
+client.connect(MQTT_BROKER)
 
 client.subscribe("ELEVATOR_CARRIER")
 client.subscribe("INKJET_SERIAL")
