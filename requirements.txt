@@ -1,4 +1,4 @@
-pip install paho-mqtt
-pip install pyserial
-pip install python-dotenv
-pip install pyodbc
+paho-mqtt
+pyserial
+python-dotenv
+pyodbc
