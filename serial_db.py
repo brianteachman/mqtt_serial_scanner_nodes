@@ -47,9 +47,9 @@ class Database:
             finally:
                 cursor.close()
 
-    def add_panel(self, serial_number, carrier_number):
+    def add_panel(self, serial_number, carrier_number, line, location):
         serial_number = serial_number.strip()
-        stmt = f"EXEC spNewSerial '{serial_number}', {carrier_number}"
+        stmt = f"EXEC spNewSerial '{serial_number}', {carrier_number}, {line}, {location}"
         result_set = self._execute(stmt)
         self.last_serial_number = serial_number
         print(result_set)

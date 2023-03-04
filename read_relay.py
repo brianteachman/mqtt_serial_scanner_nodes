@@ -4,9 +4,9 @@ import time
 
 class RelayNode():
 
-    def __init__(self) -> None:
+    def __init__(self, com_port) -> None:
         # Open a serial connection
-        self.usb = serial.Serial("COM7", 115200)
+        self.usb = serial.Serial(com_port, 115200)
 
     def read_state(self) -> str:
         line = self.usb.readline()

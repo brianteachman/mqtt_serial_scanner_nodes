@@ -14,7 +14,7 @@ if __name__ == '__main__':
 
     db = Database(config["DB_SERVER"], config["DB_NAME"], config["DB_USERNAME"], config["DB_PASSWD"])
     printer = Printer(config["MKG1000_PRINTER_IP"], int(config["MKG1000_PRINTER_PORT"]))
-    relay = RelayNode()
+    relay = RelayNode(config["PC_PORT"])
 
     has_serial = False
     is_triggered = False
@@ -43,8 +43,10 @@ if __name__ == '__main__':
         # If photoeye is triggered from panel passing under it.
         if is_triggered and has_serial:
 
+            carrier_number = 0  # TODO: Capture scanned carrier #
+
             # Send serial number that was written to database.
-            db.add_panel(serial_number, 0)
+            db.add_panel(serial_number, carrier_number, config["LINE"], config["LOCATION"])
             # print(serial_number)
             is_triggered = False
             has_serial = False
