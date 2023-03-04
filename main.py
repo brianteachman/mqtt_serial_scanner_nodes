@@ -14,7 +14,7 @@ if __name__ == '__main__':
 
     db = Database(config["DB_SERVER"], config["DB_NAME"], config["DB_USERNAME"], config["DB_PASSWD"])
     printer = Printer(config["MKG1000_PRINTER_IP"], int(config["MKG1000_PRINTER_PORT"]))
-    relay = RelayNode(config["PC_PORT"])
+    relay = RelayNode(config["RELAY_PORT"])
 
     has_serial = False
     is_triggered = False
