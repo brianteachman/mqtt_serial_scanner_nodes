@@ -83,4 +83,3 @@ if __name__ == '__main__':
 
     db.add_panel("2303050025W", 1, c["LINE"], c["LOCATION"])
     # db.get_panel("2302135001W")
-
