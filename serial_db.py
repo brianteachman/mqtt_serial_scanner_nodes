@@ -81,6 +81,6 @@ if __name__ == '__main__':
     # for panel in db._query("select * from serials;"):
         # print(str(panel))
 
-    db.add_panel("2302135001W", 1)
-    db.get_panel("2302135001W")
+    db.add_panel("2303050025W", 1, c["LINE"], c["LOCATION"])
+    # db.get_panel("2302135001W")
 

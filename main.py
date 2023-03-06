@@ -5,9 +5,13 @@ from read_relay import RelayNode
 from serial_db import Database
 from time import time, sleep
 
+# = Configure app =============================================================
+
 MIN_PANEL_FREQUENCY = 5
 
 config = dotenv_values()
+
+# ============================================================================
 
 
 if __name__ == '__main__':
@@ -20,7 +24,6 @@ if __name__ == '__main__':
     is_triggered = False
 
     last_update = time()
-
 
     while True:
 
@@ -43,7 +46,7 @@ if __name__ == '__main__':
         # If photoeye is triggered from panel passing under it.
         if is_triggered and has_serial:
 
-            carrier_number = 0  # TODO: Capture scanned carrier #
+            carrier_number = None  # TODO: Capture scanned carrier #
 
             # Send serial number that was written to database.
             db.add_panel(serial_number, carrier_number, config["LINE"], config["LOCATION"])
