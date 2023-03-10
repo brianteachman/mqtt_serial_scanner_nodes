@@ -49,7 +49,7 @@ if __name__ == '__main__':
             carrier_number = None  # TODO: Capture scanned carrier #
 
             # Send serial number that was written to database.
-            db.add_panel(serial_number, carrier_number, config["LINE"], config["LOCATION"])
+            db.add_panel(config["MACHINE_NAME"], serial_number, carrier_number)
             # print(serial_number)
             is_triggered = False
             has_serial = False
