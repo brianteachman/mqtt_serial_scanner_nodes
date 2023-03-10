@@ -52,8 +52,6 @@ class Database:
 
     def add_panel(self, serial_number, carrier_number, line, location):
         serial_number = serial_number.strip()
-        # stmt = f"EXEC spNewSerial '{serial_number}', {carrier_number}, {line}, {location}"
-        # result_set = self._execute(stmt)
         result_set = self._execute("EXEC spNewSerial ?, ?, ?, ?", (serial_number, carrier_number, line, location))
         self.last_serial_number = serial_number
         print(result_set)
@@ -85,6 +83,7 @@ if __name__ == '__main__':
     # for panel in db._query("select * from serials;"):
         # print(str(panel))
 
-    db.add_panel("2303050035W", 5, c["LINE"], c["LOCATION"])
-    db.add_panel("2303050045W", None, c["LINE"], c["LOCATION"])
+    db.add_panel(c["MACHINE_NAME"], "2303050035W", 5)
     # db.get_panel("2302135001W")
+
+
