@@ -1,33 +1,40 @@
-from win32serviceutil import ServiceFramework, HandleCommandLine
-import win32service
-import win32event
-import servicemanager
-import socket
+from python_service import PythonService
+from main import app
+import logging
 
-from main_service import main_loop
+logging.basicConfig(filename='C:\\bin\\serial_controller\\data\\service.log', encoding='utf-8', level=logging.DEBUG)
 
 
-class SerialControllerService (ServiceFramework):
-    _svc_name_ = "SerialControllerService"
-    _svc_display_name_ = "Serial Controller Service"
+class SerialPrinterService(PythonService):
 
-    def __init__(self,args):
-        ServiceFramework.__init__(self,args)
-        self.hWaitStop = win32event.CreateEvent(None,0,0,None)
-        socket.setdefaulttimeout(60)
+    # Inherited class members
+    _svc_name_ = "SerialPrinterService"
+    _svc_display_name_ = "Serial Printer Service"
+    _svc_description_ = "Update inkjet printer with serial number to print and record to database."
+    _exe_name_ = "C:\Program Files\Python311\Lib\site-packages\win32\pythonservice.exe"
+    
 
-    def SvcStop(self):
-        self.ReportServiceStatus(win32service.SERVICE_STOP_PENDING)
-        win32event.SetEvent(self.hWaitStop)
+    # Override the method to set the running condition
+    def start(self):
+        self.isrunning = True
 
-    def SvcDoRun(self):
-        servicemanager.LogMsg(servicemanager.EVENTLOG_INFORMATION_TYPE,
-                              servicemanager.PYS_SERVICE_STARTED,
-                              (self._svc_name_,''))
-        self.main()
+    # Override the method to invalidate the running condition 
+    # When the service is requested to be stopped.
+    def stop(self):
+        self.isrunning = False
 
+    # Override the method to perform the service function
     def main(self):
-        main_loop()
 
+        while self.isrunning:
+            try:
+                app.run(self.isrunning)
+            except Exception as err:
+                logging.error(err)
+                self.stop()
+
+
+# Use this condition to determine the execution context.
 if __name__ == '__main__':
-    HandleCommandLine(SerialControllerService)
+    # Handle the command line when run as a script
+    SerialPrinterService.parse_command_line()

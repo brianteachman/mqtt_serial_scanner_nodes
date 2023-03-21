@@ -2,6 +2,6 @@
 __pycache__/
 build/
 dist/
-mqtt/
+data/
 .env
 *.spec

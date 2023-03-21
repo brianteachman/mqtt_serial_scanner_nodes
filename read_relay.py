@@ -6,7 +6,7 @@ class RelayNode():
 
     def __init__(self, com_port) -> None:
         # Open a serial connection
-        self.usb = serial.Serial(com_port, 115200)
+        self.usb = serial.Serial(com_port, 9600)
 
     def read_state(self) -> str:
         line = self.usb.readline()
@@ -20,7 +20,10 @@ class RelayNode():
 if __name__ == '__main__':
     print("Running Serial test.")
 
-    relay = RelayNode()
+    from dotenv import dotenv_values
+    config = dotenv_values()
+
+    relay = RelayNode(config["RELAY_PORT"])
 
     try:
         # Read serial data from uController relay
