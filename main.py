@@ -24,48 +24,53 @@ class MainApp():
         self.relay = RelayNode(config["RELAY_PORT"])
 
         # Setup state variables
+        self.serial_number = None
         self.has_serial = False
         self.is_triggered = False
         self.first_run = True
         self.last_update = time()
-    
+
+    def step(self):
+        ''' The business logic '''
+
+        this_time = time()
+
+        # Printer needs serial number in before photoeye trigger order to respond in time.
+        if not self.has_serial:
+
+            # Send serial number to printer and acknowledge reciept of serial.
+            self.serial_number = new_serial()
+            if self.printer.send_serial(self.serial_number):
+                self.has_serial = True
+
+        # The photoeye triggering causes printer to write serial number.
+        if (self.relay.read_state() == "Closed") and not self.is_triggered and (((this_time - self.last_update) > MIN_PANEL_FREQUENCY) or self.first_run):
+
+            if self.first_run:
+                self.first_run = False
+                
+            # This means serial printer has written.
+            self.is_triggered = True
+
+        # If photoeye is triggered from panel passing under it.
+        if self.is_triggered and self.has_serial:
+
+            carrier_number = None  # TODO: Capture scanned carrier #
+
+            # Send serial number that was written to database.
+            self.db.add_panel(self.machine_name, self.serial_number, carrier_number)
+            self.is_triggered = False
+            self.has_serial = False
+            self.serial_number = None
+            self.last_update = this_time
+            sleep(1)
+
     def run(self, is_running=True):
-        ''' Run the business logic '''
+        ''' Run the business logic in a loop '''
 
         while is_running:
-
-            this_time = time()
-
-            # Printer needs serial number in before photoeye trigger order to respond in time.
-            if not self.has_serial:
-
-                # Send serial number to printer and acknowledge reciept of serial.
-                serial_number = new_serial()
-                if self.printer.send_serial(serial_number):
-                    self.has_serial = True
-
-            # The photoeye triggering causes printer to write serial number.
-            if (self.relay.read_state() == "Closed") and not self.is_triggered and (((this_time - self.last_update) > MIN_PANEL_FREQUENCY) or self.first_run):
-
-                if self.first_run:
-                    self.first_run = False
-                    
-                # This means serial printer has written.
-                self.is_triggered = True
-
-            # If photoeye is triggered from panel passing under it.
-            if self.is_triggered and self.has_serial:
-
-                carrier_number = None  # TODO: Capture scanned carrier #
-
-                # Send serial number that was written to database.
-                self.db.add_panel(self.machine_name, serial_number, carrier_number)
-                # print(serial_number)
-                self.is_triggered = False
-                self.has_serial = False
-                self.last_update = this_time
-                sleep(1)
-
+            self.step()
+            
 
 app = MainApp()
 
