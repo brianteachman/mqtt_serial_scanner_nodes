@@ -1,4 +1,3 @@
-#import asyncio
 import socket
 from time import sleep
 
@@ -130,7 +129,10 @@ class Scanner:
 
 if __name__ == '__main__':
 
-    s = Scanner("192.168.1.54", 9004)
+    from dotenv import dotenv_values
+    c = dotenv_values()
+
+    s = Scanner(c["SR1000_SCANNER_IP"], int(c["SR1000_SCANNER_PORT"]))
 
     try:
 

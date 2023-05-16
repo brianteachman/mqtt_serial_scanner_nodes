@@ -1,8 +1,8 @@
 from datetime import datetime
 import json
 
-
-daily_count = 0
+# Seven thousand is this facilities location code
+daily_count = 7000
 
 new_day = False
 
@@ -20,7 +20,7 @@ def _check_last_serial_data():
     global daily_count
     data = _fetch_last()
     if data["lastid_date"] < datetime.now().strftime('%y%m%d'):
-        daily_count = 0
+        daily_count = 7000
     elif data["lastid"] > 0 and daily_count == 0:
         daily_count = data["lastid"]
     # print(data)
