@@ -1,9 +1,8 @@
 from datetime import datetime
+from dotenv import dotenv_values
 import json
 
-LOCATION = 'B'
-TYPE = 'M'
-LINE = '04'
+c = dotenv_values()
 
 daily_count = 0
 
@@ -29,7 +28,11 @@ def new_serial():
     now = datetime.now()
     global daily_count
     daily_count = daily_count + 1
-    serial_number = now.strftime('%y%m%d') + LOCATION + TYPE + LINE + str(daily_count).zfill(4)
+    serial_number = now.strftime('%y%m%d') \
+        + c["LOCATION"] \
+        + c["PRODUCT_TYPE"] \
+        + str(c["LINE"]).zfill(2) \
+        + str(daily_count).zfill(4)
     _persist(daily_count, now.strftime('%y%m%d'), now.strftime('%H:%M'))
     return serial_number
 

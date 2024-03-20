@@ -11,8 +11,10 @@ This project tells a Keyence MK-G1000 Inkjet printer what the next serial number
 
 #### Create .env file
 
-    LINE = 5  # Line Number
-    LOCATION = 2  # Plant Location
+    LINE = 4  # MWT
+    LOCATION = "B"
+    PRODUCT_TYPE = 'M_OR_C'
+    MACHINE_NAME = 'MACHINE_NAME'
 
     RELAY_PORT = "YOUR_COMPORT"
 

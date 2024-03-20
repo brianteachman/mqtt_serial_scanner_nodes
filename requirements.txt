@@ -1,4 +1,4 @@
-paho-mqtt
 pyserial
 python-dotenv
 pyodbc
+pywin32
