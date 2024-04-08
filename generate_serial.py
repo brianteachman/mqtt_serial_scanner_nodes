@@ -1,15 +1,12 @@
 from datetime import datetime
-from dotenv import dotenv_values
 import json
-
-c = dotenv_values()
 
 daily_count = 0
 
 new_day = False
 
 
-def new_serial():
+def new_serial(c):
     """
     Format: YYMMDDLTLNXXXX
 
@@ -46,7 +43,7 @@ def _check_last_serial_data():
     # print(data)
 
 def _fetch_last():
-    with open("./data/last_serial_data.json", "r") as read_file:
+    with open("C:\\bin\\serial_controller\\data\\last_serial_data.json", "r") as read_file:
         data = json.load(read_file)
     return data
 
@@ -56,7 +53,7 @@ def _persist(id, last_date, last_time):
         "lastid_date": last_date,
         "lastid_time": last_time
     }
-    with open("./data/last_serial_data.json", "w") as write_file:
+    with open("C:\\bin\\serial_controller\\data\\last_serial_data.json", "w") as write_file:
         json.dump(data, write_file)
 
 

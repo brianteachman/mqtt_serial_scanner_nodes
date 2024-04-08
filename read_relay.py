@@ -9,8 +9,11 @@ class RelayNode():
         self.usb = serial.Serial(com_port, 9600)
 
     def read_state(self) -> str:
+        if not self.usb.isOpen():
+            self.usb.open()
         line = self.usb.readline()
         self.usb.reset_input_buffer()
+        self.usb.close()
         return line.decode().replace("\r\n","")
 
     def close(self):

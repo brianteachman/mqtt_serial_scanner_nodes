@@ -4,9 +4,9 @@ This project tells a Keyence MK-G1000 Inkjet printer what the next serial number
 
 ## Install
 
-#### Install dependencies 
+#### Install dependencies globally 
 
-    > pip install -r requirements.txt
+    > python -m pip install -r requirements.txt
 
 
 #### Create .env file
