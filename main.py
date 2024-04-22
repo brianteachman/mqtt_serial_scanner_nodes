@@ -16,7 +16,7 @@ class MainApp():
 
     def __init__(self):
         ''' Class constructor'''
-        self.log = get_logger(__name__, debug=True)
+        self.log = get_logger(__name__, debug=False)
 
         # Setup domain objects
         self.env = dotenv_values()
